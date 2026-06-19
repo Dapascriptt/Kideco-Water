@@ -1,6 +1,5 @@
 import { sensors } from '../data/mockData';
 import SensorCard from '../components/SensorCard';
-import './Sensors.css';
 
 export default function Sensors() {
   const online = sensors.filter((s) => s.status === 'online').length;

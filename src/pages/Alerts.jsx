@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { usePonds } from '../context/PondContext';
 import AlertItem from '../components/AlertItem';
-import './Alerts.css';
 
 const SEVERITY_ORDER = { critical: 0, warning: 1, info: 2 };
 

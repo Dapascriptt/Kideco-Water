@@ -1,5 +1,3 @@
-import './StatusBadge.css';
-
 const LABELS = {
   safe: 'AMAN',
   warning: 'WASPADA',

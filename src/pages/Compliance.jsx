@@ -4,7 +4,6 @@ import ComplianceChart from '../components/charts/ComplianceChart';
 import {
   complianceData, QUALITY_STANDARDS, STANDARD_REF,
 } from '../data/mockData';
-import './Compliance.css';
 
 const PAGE_SIZE = 25;
 const PARAMS = ['pH', 'tss', 'fe', 'mn'];

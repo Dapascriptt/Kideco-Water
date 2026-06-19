@@ -1,5 +1,4 @@
 import { getComplianceStatus } from '../data/mockData';
-import './ParameterCard.css';
 
 const STATUS_COLOR = {
   safe: 'var(--status-safe)',

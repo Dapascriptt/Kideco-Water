@@ -1,5 +1,3 @@
-import './SvgPondMap.css';
-
 const FILL = {
   safe: 'var(--safe-fill)',
   warning: 'var(--warn-fill)',

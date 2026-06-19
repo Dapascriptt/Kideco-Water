@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { usePonds } from '../context/PondContext';
 import SvgPondMap from '../components/SvgPondMap';
 import StatusBadge from '../components/StatusBadge';
-import './Overview.css';
 
 const TREND_LABEL = { rising: 'Naik ▲', falling: 'Turun ▼', stable: 'Stabil ▬' };
 

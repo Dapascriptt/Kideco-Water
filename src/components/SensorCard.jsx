@@ -1,5 +1,3 @@
-import './SensorCard.css';
-
 const STATUS_META = {
   online:      { label: 'Online',      color: 'var(--status-safe)' },
   offline:     { label: 'Offline',     color: 'var(--status-alert)' },

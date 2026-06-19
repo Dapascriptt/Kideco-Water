@@ -5,7 +5,6 @@ import AiBriefing from '../components/AiBriefing';
 import {
   aiModel, aiModelMetrics,
 } from '../data/mockData';
-import './Dashboard.css';
 
 const TREND_GLYPH = { rising: '▲', falling: '▼', stable: '▬' };
 const TREND_LABEL = { rising: 'Naik', falling: 'Turun', stable: 'Stabil' };

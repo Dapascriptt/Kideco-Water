@@ -6,7 +6,6 @@ import ParameterCard from '../components/ParameterCard';
 import PhTrendChart from '../components/charts/PhTrendChart';
 import LevelInflowChart from '../components/charts/LevelInflowChart';
 import { aiModel } from '../data/mockData';
-import './PondDetail.css';
 
 const RISK_META = {
   emergency: { label: 'DARURAT', glyph: '🚨', cls: 'risk-emergency' },

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { usePonds } from '../context/PondContext';
 import { aiModel } from '../data/mockData';
-import './AiBriefing.css';
 
 const SEV_COLOR = {
   critical: 'var(--status-alert)',

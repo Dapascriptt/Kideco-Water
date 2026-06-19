@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { usePonds } from "../context/PondContext";
-import "./SimulationControlPanel.css";
 
 export default function SimulationControlPanel() {
   const [isOpen, setIsOpen] = useState(false);

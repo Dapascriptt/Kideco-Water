@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { usePonds } from '../context/PondContext';
-import './Sidebar.css';
 
 const NAV = [
   { to: '/', label: 'Dashboard', glyph: '▣', end: true },

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import StatusBadge from './StatusBadge';
-import './AlertItem.css';
 
 const LEVEL_TO_STATUS = { critical: 'critical', warning: 'warning', info: 'info' };
 
