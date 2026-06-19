@@ -3,7 +3,7 @@ import { usePonds } from '../context/PondContext';
 import StatusBadge from '../components/StatusBadge';
 import AiBriefing from '../components/AiBriefing';
 import {
-  aiModel, aiModelMetrics, aiForecastByPond, globalConditions,
+  aiModel, aiModelMetrics,
 } from '../data/mockData';
 import './Dashboard.css';
 
@@ -11,12 +11,28 @@ const TREND_GLYPH = { rising: '▲', falling: '▼', stable: '▬' };
 const TREND_LABEL = { rising: 'Naik', falling: 'Turun', stable: 'Stabil' };
 
 export default function Dashboard() {
-  const { ponds, counts, alerts, liveConnected } = usePonds();
+  const {
+    ponds,
+    counts,
+    alerts,
+    liveConnected,
+    weather,
+    rainfall,
+    laNina,
+    aiForecast,
+  } = usePonds();
   const navigate = useNavigate();
 
-  const overflowProb = aiForecastByPond.B1.overflowProbability;
+  const overflowProb = aiForecast.B1.overflowProbability;
   const criticalAlerts = alerts.filter((a) => a.level === 'critical');
   const topAlerts = alerts.slice(0, 3);
+
+  const getWeatherText = () => {
+    if (weather === 'sunny') return '☀️ Cerah';
+    if (weather === 'light_rain') return '🌦️ Gerimis';
+    if (weather === 'moderate_rain') return '🌧️ Hujan Sedang';
+    return '⛈️ Hujan Lebat';
+  };
 
   return (
     <div className="dashboard">
@@ -33,12 +49,12 @@ export default function Dashboard() {
           <span className="dsb-count alert mono">{counts.critical} Kritis</span>
         </div>
         <div className="dsb-right">
-          <span className="dsb-weather mono">🌧 {globalConditions.rainfall} mm/jam · La Niña Aktif</span>
+          <span className="dsb-weather mono">{getWeatherText()} · {rainfall} mm/jam · La Niña {laNina ? 'Aktif' : 'Nonaktif'}</span>
           <span className={`dsb-live ${liveConnected ? 'on' : 'off'}`}>
             <span className="dsb-live-dot" />
             {liveConnected ? 'LIVE' : 'TERPUTUS'}
           </span>
-          <span className="timestamp">sync {globalConditions.serverSync} WITA</span>
+          <span className="timestamp">sync {new Date().toLocaleTimeString('id-ID', { hour12: false })} WITA</span>
         </div>
       </header>
 
@@ -56,8 +72,8 @@ export default function Dashboard() {
           sub={`${criticalAlerts.length} peringatan kritis aktif`} />
         <KpiTile label="Kolam Waspada" value={counts.warning} tone={counts.warning ? 'warn' : 'safe'}
           sub="mendekati batas baku mutu" />
-        <KpiTile label="Prob. Luapan (B1)" value={`${Math.round(overflowProb * 100)}%`} tone="alert"
-          sub={`est. luapan ~${aiForecastByPond.B1.estimatedOverflowInHours} jam (AI)`} />
+        <KpiTile label="Prob. Luapan (B1)" value={`${Math.round(overflowProb * 100)}%`} tone={overflowProb > 0.5 ? 'alert' : 'safe'}
+          sub={aiForecast.B1.estimatedOverflowInHours ? `est. luapan ~${aiForecast.B1.estimatedOverflowInHours} jam (AI)` : 'tidak ada risiko luapan'} />
         <KpiTile label="Akurasi Model (7h)" value={`${Math.round(aiModelMetrics.forecastAccuracy7d * 100)}%`} tone="info"
           sub={`MAE pH ${aiModelMetrics.meanAbsErrorPH}`} />
       </div>

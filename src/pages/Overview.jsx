@@ -2,13 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { usePonds } from '../context/PondContext';
 import SvgPondMap from '../components/SvgPondMap';
 import StatusBadge from '../components/StatusBadge';
-import { globalConditions } from '../data/mockData';
 import './Overview.css';
 
 const TREND_LABEL = { rising: 'Naik ▲', falling: 'Turun ▼', stable: 'Stabil ▬' };
 
 export default function Overview() {
-  const { ponds, counts, liveConnected } = usePonds();
+  const { ponds, counts, liveConnected, rainfall } = usePonds();
   const navigate = useNavigate();
 
   return (
@@ -23,7 +22,7 @@ export default function Overview() {
         </span>
         <span className="ov-sb-right">
           <span className={`ov-live ${liveConnected ? 'on' : ''}`}><span className="ov-live-dot" />{liveConnected ? 'LIVE' : 'OFF'}</span>
-          <span className="timestamp">sync {globalConditions.serverSync} WITA</span>
+          <span className="timestamp">sync {new Date().toLocaleTimeString('id-ID', { hour12: false })} WITA</span>
         </span>
       </header>
 
@@ -36,7 +35,7 @@ export default function Overview() {
 
       <div className="ov-grid">
         <div className="ov-map panel">
-          <div className="panel-head"><span>Denah Settling Pond</span><span className="timestamp">curah hujan {globalConditions.rainfall}mm/jam</span></div>
+          <div className="panel-head"><span>Denah Settling Pond</span><span className="timestamp">curah hujan {rainfall}mm/jam</span></div>
           <div className="ov-map-inner">
             <SvgPondMap ponds={ponds} onSelectPond={(id) => navigate(`/pond/${id}`)} />
           </div>

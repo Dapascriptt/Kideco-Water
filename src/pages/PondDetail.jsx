@@ -5,10 +5,7 @@ import StatusBadge from '../components/StatusBadge';
 import ParameterCard from '../components/ParameterCard';
 import PhTrendChart from '../components/charts/PhTrendChart';
 import LevelInflowChart from '../components/charts/LevelInflowChart';
-import {
-  phTrendByPond, levelInflowByPond, aiForecastByPond,
-  aiRecommendationsByPond, aiModel,
-} from '../data/mockData';
+import { aiModel } from '../data/mockData';
 import './PondDetail.css';
 
 const RISK_META = {
@@ -23,7 +20,15 @@ const ICON = { lime: '⚗', pump: '⚡', eye: '👁' };
 
 export default function PondDetail() {
   const { pondId } = useParams();
-  const { ponds } = usePonds();
+  const { 
+    ponds, 
+    trends, 
+    aiRecommendations, 
+    aiForecast, 
+    applyLimeDosing, 
+    togglePump, 
+    pumpsActive 
+  } = usePonds();
   const [logged, setLogged] = useState(false);
 
   const pond = ponds.find((p) => p.id === pondId);
@@ -35,10 +40,11 @@ export default function PondDetail() {
     );
   }
 
-  const phData = phTrendByPond[pondId] || phTrendByPond.default;
-  const lvData = levelInflowByPond[pondId] || levelInflowByPond.default;
-  const forecast = aiForecastByPond[pondId] || aiForecastByPond.default;
-  const rec = aiRecommendationsByPond[pondId] || aiRecommendationsByPond.default;
+  // Get dynamic logs from trends state (pH and level/inflow)
+  const phData = trends[pondId] || [];
+  const lvData = trends[pondId] || [];
+  const forecast = aiForecast[pondId] || aiForecast.default;
+  const rec = aiRecommendations[pondId] || aiRecommendations.default;
 
   return (
     <div className="pond-detail">
@@ -69,12 +75,24 @@ export default function PondDetail() {
       {/* ---- Charts ---- */}
       <div className="grid grid-2">
         <section className="panel">
-          <div className="panel-head"><span>Tren pH — 12 Jam Terakhir</span></div>
-          <div className="pd-chart"><PhTrendChart data={phData} /></div>
+          <div className="panel-head"><span>Tren pH — 12 Jam Terakhir (Real-Time)</span></div>
+          <div className="pd-chart">
+            {phData.length === 0 ? (
+              <div className="empty-state">Menunggu data simulasi...</div>
+            ) : (
+              <PhTrendChart data={phData} />
+            )}
+          </div>
         </section>
         <section className="panel">
-          <div className="panel-head"><span>Level Kolam & Inflow</span></div>
-          <div className="pd-chart"><LevelInflowChart data={lvData} /></div>
+          <div className="panel-head"><span>Level Kolam & Inflow (Real-Time)</span></div>
+          <div className="pd-chart">
+            {lvData.length === 0 ? (
+              <div className="empty-state">Menunggu data simulasi...</div>
+            ) : (
+              <LevelInflowChart data={lvData} />
+            )}
+          </div>
         </section>
       </div>
 
@@ -122,7 +140,7 @@ export default function PondDetail() {
 
         {/* Recommendation panel */}
         <section className="panel pd-rec">
-          <div className="panel-head"><span>Rekomendasi Sistem (AI)</span></div>
+          <div className="panel-head"><span>Rekomendasi Sistem (AI) — Interaktif</span></div>
           <div className="pd-rec-body">
             {rec.urgency === 'none' ? (
               <div className="empty-state">Kondisi normal — tidak ada tindakan yang diperlukan saat ini.</div>
@@ -132,15 +150,54 @@ export default function PondDetail() {
                   {rec.urgency === 'immediate' ? '🔴' : '🟡'} {rec.headline}
                 </div>
                 <ol className="pd-actions">
-                  {rec.actions.map((a) => (
-                    <li key={a.id} className="pd-action">
-                      <span className="pd-action-icon">{ICON[a.icon] || '•'}</span>
-                      <div>
-                        <div className="pd-action-title">{a.title}</div>
-                        {a.lines.map((l, i) => <div key={i} className="pd-action-line mono">{l}</div>)}
-                      </div>
-                    </li>
-                  ))}
+                  {rec.actions.map((a) => {
+                    const isLime = a.icon === 'lime';
+                    const isTransferPump = a.title.includes('Transfer');
+                    const isAuxPump = a.title.includes('Cadangan');
+
+                    return (
+                      <li key={a.id} className="pd-action">
+                        <span className="pd-action-icon">{ICON[a.icon] || '•'}</span>
+                        <div style={{ flex: 1 }}>
+                          <div className="pd-action-title">{a.title}</div>
+                          {a.lines.map((l, i) => <div key={i} className="pd-action-line mono">{l}</div>)}
+                          
+                          {/* Interactive Action Buttons */}
+                          <div className="pd-action-btn-inline" style={{ marginTop: '0.5rem' }}>
+                            {isLime && (
+                              <button 
+                                className="btn btn-sm btn-primary"
+                                style={{ background: '#238636', borderColor: '#2ea043' }}
+                                onClick={() => {
+                                  const amt = pondId === 'A2' ? 120 : 450;
+                                  applyLimeDosing(pondId, amt);
+                                  setLogged(true);
+                                }}
+                              >
+                                🧪 Terapkan Dosing ({pondId === 'A2' ? '120kg' : '450kg'})
+                              </button>
+                            )}
+                            {isTransferPump && (
+                              <button 
+                                className={`btn btn-sm ${pumpsActive.B1_B2 ? 'btn-danger' : 'btn-primary'}`}
+                                onClick={() => togglePump('B1_B2')}
+                              >
+                                {pumpsActive.B1_B2 ? '🛑 Matikan Pompa B1→B2' : '⚡ Hidupkan Pompa B1→B2'}
+                              </button>
+                            )}
+                            {isAuxPump && (
+                              <button 
+                                className={`btn btn-sm ${pumpsActive.B1_aux ? 'btn-danger' : 'btn-primary'}`}
+                                onClick={() => togglePump('B1_aux')}
+                              >
+                                {pumpsActive.B1_aux ? '🛑 Matikan Pompa Cadangan' : '⚡ Hidupkan Pompa Cadangan'}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ol>
                 {rec.impact.length > 0 && (
                   <div className="pd-impact">
@@ -157,7 +214,7 @@ export default function PondDetail() {
                   <button className="btn btn-primary" onClick={() => setLogged(true)}>Catat Tindakan Diambil</button>
                   <button className="btn" onClick={() => setLogged(true)}>Simpan ke Log Tindakan</button>
                 </div>
-                {logged && <div className="pd-logged mono">✓ Tindakan tercatat ke log operasional ({new Date().toLocaleTimeString('id-ID', { hour12: false })} WITA)</div>}
+                {logged && <div className="pd-logged mono">✓ Tindakan tercatat ke log operasional & histori audit ({new Date().toLocaleTimeString('id-ID', { hour12: false })} WITA)</div>}
               </>
             )}
           </div>

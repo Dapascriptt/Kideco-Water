@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { aiDashboardBriefing, aiModel } from '../data/mockData';
+import { usePonds } from '../context/PondContext';
+import { aiModel } from '../data/mockData';
 import './AiBriefing.css';
 
 const SEV_COLOR = {
@@ -9,7 +10,7 @@ const SEV_COLOR = {
 };
 
 export default function AiBriefing() {
-  const b = aiDashboardBriefing;
+  const { aiDashboardBriefing: b } = usePonds();
   const color = SEV_COLOR[b.severity] || 'var(--status-info)';
 
   return (
@@ -34,11 +35,21 @@ export default function AiBriefing() {
 
       <div className="aib-foot">
         <span className="aib-conf mono">
-          Fokus rekomendasi: <strong>Pond {b.recommendedFocus}</strong>
+          {b.recommendedFocus ? (
+            <>Fokus rekomendasi: <strong>Pond {b.recommendedFocus}</strong></>
+          ) : (
+            <>Fokus rekomendasi: <strong>Semua Aman</strong></>
+          )}
         </span>
-        <Link className="btn btn-primary aib-cta" to={`/pond/${b.recommendedFocus}`}>
-          Buka Detail Pond {b.recommendedFocus} →
-        </Link>
+        {b.recommendedFocus ? (
+          <Link className="btn btn-primary aib-cta" to={`/pond/${b.recommendedFocus}`}>
+            Buka Detail Pond {b.recommendedFocus} →
+          </Link>
+        ) : (
+          <Link className="btn btn-primary aib-cta" to="/pond/B1">
+            Buka Detail Pond B1 →
+          </Link>
+        )}
       </div>
     </section>
   );

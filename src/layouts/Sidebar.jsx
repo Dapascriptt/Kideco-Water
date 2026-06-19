@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { usePonds } from '../context/PondContext';
-import { globalConditions } from '../data/mockData';
 import './Sidebar.css';
 
 const NAV = [
@@ -14,7 +13,7 @@ const NAV = [
 ];
 
 export default function Sidebar() {
-  const { counts, criticalAlertCount } = usePonds();
+  const { counts, criticalAlertCount, weather, rainfall, laNina } = usePonds();
   const { pathname } = useLocation();
   const [clock, setClock] = useState(() => new Date().toLocaleTimeString('id-ID', { hour12: false }));
 
@@ -58,12 +57,14 @@ export default function Sidebar() {
         <div className="sb-section-title label-sm">Kondisi Global</div>
         <div className="sb-cond">
           <span className="label-sm">Cuaca</span>
-          <span className="mono">🌧 {globalConditions.rainfall}mm/jam</span>
+          <span className="mono">
+            {weather === 'sunny' ? '☀️ Cerah' : weather === 'light_rain' ? '🌦️ Gerimis' : weather === 'moderate_rain' ? '🌧️ Sedang' : '⛈️ Lebat'} ({rainfall}mm/j)
+          </span>
         </div>
         <div className="sb-cond">
           <span className="label-sm">La Niña</span>
-          <span className="mono" style={{ color: 'var(--status-warn)' }}>
-            {globalConditions.laNina ? 'Aktif' : 'Nonaktif'}
+          <span className="mono" style={{ color: laNina ? 'var(--status-warn)' : 'var(--text-secondary)' }}>
+            {laNina ? 'Aktif' : 'Nonaktif'}
           </span>
         </div>
         <div className="sb-cond">

@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
+import { usePonds } from '../context/PondContext';
 import ComplianceChart from '../components/charts/ComplianceChart';
 import {
-  historyData, complianceData, QUALITY_STANDARDS, STANDARD_REF,
+  complianceData, QUALITY_STANDARDS, STANDARD_REF,
 } from '../data/mockData';
 import './Compliance.css';
 
@@ -17,6 +18,7 @@ function cellViolates(key, value) {
 }
 
 export default function Compliance() {
+  const { historyData } = usePonds();
   const [pondFilter, setPondFilter] = useState('all');
   const [from, setFrom] = useState('2026-06-19');
   const [to, setTo] = useState('2026-06-19');
@@ -33,7 +35,7 @@ export default function Compliance() {
       return sortDir === 'asc' ? cmp : -cmp;
     });
     return list;
-  }, [pondFilter, sortKey, sortDir]);
+  }, [historyData, pondFilter, sortKey, sortDir]);
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -46,9 +48,9 @@ export default function Compliance() {
   const visibleParams = paramFilter === 'all' ? PARAMS : [paramFilter];
 
   const exportCSV = () => {
-    const header = ['Waktu', 'Kolam', 'pH', 'TSS', 'Fe', 'Mn', 'Level', 'Kepatuhan'];
+    const header = ['Waktu', 'Kolam', 'pH', 'TSS', 'Fe', 'Mn', 'Level', 'Kepatuhan', 'Catatan'];
     const lines = rows.map((r) =>
-      [r.time, r.pond, r.pH, r.tss, r.fe, r.mn, r.level, r.compliant ? 'SESUAI' : 'MELANGGAR'].join(',')
+      [r.time, r.pond, r.pH, r.tss, r.fe, r.mn, r.level, r.compliant ? 'SESUAI' : 'MELANGGAR', r.note || ''].join(',')
     );
     const csv = [header.join(','), ...lines].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -114,7 +116,10 @@ export default function Compliance() {
               {pageRows.map((r) => (
                 <tr key={r.id}>
                   <td className="mono">{r.time}</td>
-                  <td>Pond {r.pond}</td>
+                  <td>
+                    <div>Pond {r.pond}</div>
+                    {r.note && <div className="label-sm mono" style={{ color: '#58a6ff', marginTop: '2px', fontSize: '10px' }}>📝 {r.note}</div>}
+                  </td>
                   {visibleParams.includes('pH') && <Cell k="pH" v={r.pH} />}
                   {visibleParams.includes('tss') && <Cell k="tss" v={r.tss} />}
                   {visibleParams.includes('fe') && <Cell k="fe" v={r.fe} />}
@@ -150,6 +155,7 @@ function Th({ label, k, sortKey, sortDir, setSort }) {
   );
 }
 
+// Cell component to display highlighted violation cell in red
 function Cell({ k, v }) {
   const bad = cellViolates(k, v);
   return <td className={`mono ${bad ? 'cmp-cell-bad' : ''}`}>{v}</td>;
