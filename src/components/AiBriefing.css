@@ -1,0 +1,45 @@
+.ai-briefing {
+  padding: var(--sp-4) var(--sp-6);
+  border-top: 3px solid var(--status-info);
+}
+.aib-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+}
+.aib-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+.aib-chip {
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+.aib-headline { font-size: 16px; font-weight: 700; margin: 0 0 var(--sp-2); }
+.aib-body { margin: 0 0 var(--sp-4); color: var(--text-secondary); font-size: 13px; max-width: 95ch; }
+
+.aib-drivers { margin-bottom: var(--sp-4); }
+.aib-drivers ul { margin: var(--sp-2) 0 0; padding-left: 18px; }
+.aib-drivers li { font-size: 13px; color: var(--text-primary); margin-bottom: 3px; }
+
+.aib-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+.aib-conf { font-size: 13px; color: var(--text-secondary); }
+.aib-cta { white-space: nowrap; }

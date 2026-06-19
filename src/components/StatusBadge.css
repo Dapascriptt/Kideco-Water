@@ -1,0 +1,28 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.sb-md { font-size: 11px; padding: 3px 8px; }
+.sb-sm { font-size: 10px; padding: 2px 6px; }
+.sb-lg { font-size: 13px; padding: 5px 12px; }
+
+.sb-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+
+.sb-safe     { color: var(--status-safe);  background: var(--safe-bg);  border-color: #B7E0C2; }
+.sb-safe .sb-dot { background: var(--status-safe); }
+
+.sb-warning  { color: var(--status-warn);  background: var(--warn-bg);  border-color: #ECD68A; }
+.sb-warning .sb-dot { background: var(--status-warn); }
+
+.sb-critical { color: var(--status-alert); background: var(--alert-bg); border-color: #F4B6B3; }
+.sb-critical .sb-dot { background: var(--status-alert); }
+
+.sb-info     { color: var(--status-info);  background: var(--info-bg);  border-color: #ADCFF6; }
+.sb-info .sb-dot { background: var(--status-info); }

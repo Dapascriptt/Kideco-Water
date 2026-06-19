@@ -1,0 +1,17 @@
+.sensors-page { display: flex; flex-direction: column; gap: var(--sp-4); }
+
+.sensors-summary { display: flex; gap: var(--sp-3); align-items: center; }
+.ss-item { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+.ss-item::before { content: ''; width: 9px; height: 9px; border-radius: 50%; }
+.ss-online { color: var(--status-safe); }
+.ss-online::before { background: var(--status-safe); }
+.ss-calib { color: var(--status-info); }
+.ss-calib::before { background: var(--status-info); }
+.ss-offline { color: var(--status-alert); }
+.ss-offline::before { background: var(--status-alert); }
+
+.sensors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-4);
+}

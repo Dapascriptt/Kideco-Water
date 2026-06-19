@@ -1,0 +1,36 @@
+.param-card {
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.param-name { color: var(--text-secondary); }
+.param-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.param-unit { font-size: 0.9rem; font-weight: 400; }
+
+.param-bar {
+  height: 4px;
+  background: var(--bg-elevated);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.param-bar span { display: block; height: 100%; }
+
+.param-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.param-std { font-size: 12px; color: var(--text-secondary); }
+
+.param-flag { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.flag-bad { color: var(--status-alert); }
+.flag-ok  { color: var(--status-safe); }
+
+.param-trend { font-size: 12px; }

@@ -1,0 +1,31 @@
+.sensor-card {
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.sensor-id { font-size: 15px; font-weight: 700; }
+.sensor-type { color: var(--text-secondary); margin-bottom: var(--sp-2); }
+
+.sensor-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.sensor-status { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.sensor-dot { width: 8px; height: 8px; border-radius: 50%; }
+.sensor-muted { color: var(--text-muted); }
+.sensor-value { font-weight: 700; }
+
+.sensor-signal { display: inline-flex; align-items: center; gap: 6px; }
+.bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+.bars i { width: 3px; background: var(--border-strong); border-radius: 1px; display: inline-block; }
+.bars i.on { background: var(--status-safe); }
+
+.sensor-bat { display: inline-flex; align-items: center; gap: 8px; }
+.bat-track { width: 54px; height: 8px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+.bat-track span { display: block; height: 100%; }
+
+.sensor-divider { height: 1px; background: var(--border); margin: var(--sp-2) 0; }
+.sensor-btn { margin-top: var(--sp-2); justify-content: center; font-size: 12px; padding: 6px; }

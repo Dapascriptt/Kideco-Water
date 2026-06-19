@@ -1,0 +1,137 @@
+/* ============================================================
+   KidecoWater — Design Tokens (LIGHT MODE)
+   Industrial control-room aesthetic, light surfaces.
+   Status colors keep operational meaning, never decoration.
+   ============================================================ */
+
+:root {
+  /* Surfaces */
+  --bg-primary:    #F2F5F8;   /* Page background */
+  --bg-surface:    #FFFFFF;   /* Card / panel */
+  --bg-elevated:   #E9EDF1;   /* Slightly recessed panel */
+  --bg-inset:      #F7F9FB;   /* Table stripe / inset */
+
+  /* Borders (we use borders, not shadows) */
+  --border:        #D6DCE2;
+  --border-strong: #AEB7C0;
+
+  /* Text */
+  --text-primary:  #161B22;
+  --text-secondary:#5A6571;
+  --text-muted:    #98A2AE;
+
+  /* Status — operational meaning only */
+  --status-safe:   #1A7F37;
+  --status-warn:   #BF8700;
+  --status-alert:  #D1242F;
+  --status-info:   #0969DA;
+
+  /* Status tints (badge / row backgrounds) */
+  --safe-bg:   #E6F4EA;
+  --warn-bg:   #FCF3D9;
+  --alert-bg:  #FCEBEA;
+  --info-bg:   #DDEEFD;
+
+  /* Status fills for SVG map (a touch stronger) */
+  --safe-fill:  #57C172;
+  --warn-fill:  #E3B341;
+  --alert-fill: #F0716D;
+
+  /* Single action accent */
+  --accent:        #1F6FEB;
+  --accent-hover:  #1A5FCB;
+
+  /* Typography */
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', monospace;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Spacing scale (tight, technical) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+
+  --radius: 4px;
+  --sidebar-w: 240px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button { font-family: var(--font-body); cursor: pointer; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-elevated); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 5px; }
+
+/* ---- Reusable primitives ---- */
+.panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.panel-head {
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+.btn:hover { background: var(--bg-elevated); }
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+
+.label-sm {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.unit { font-size: 12px; color: var(--text-secondary); font-weight: 400; }
+.timestamp { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
