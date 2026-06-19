@@ -138,6 +138,31 @@ export function PondProvider({ children }) {
     });
   };
 
+  const addLogEntry = (pondId, note, operatorName = 'Operator') => {
+    const stamp = getClockString();
+    const datePrefix = new Date().toISOString().split('T')[0];
+    setPonds(currentPonds => {
+      const pond = currentPonds.find(p => p.id === pondId);
+      const violating = pond ? (pond.pH < 6 || pond.pH > 9 || pond.tss > 400 || pond.fe > 7 || pond.mn > 4) : false;
+      setHistoryData(prev => [
+        {
+          id: Math.max(...prev.map(r => r.id), 0) + 1,
+          time: `${datePrefix} ${stamp}`,
+          pond: pondId,
+          pH: pond?.pH || 7.0,
+          tss: pond?.tss || 150,
+          fe: pond?.fe || 2.0,
+          mn: pond?.mn || 1.5,
+          level: Math.round(pond?.level || 50),
+          compliant: !violating,
+          note: note ? `${note} (oleh ${operatorName})` : `Tindakan rekomendasi AI dilaksanakan (oleh ${operatorName})`
+        },
+        ...prev
+      ]);
+      return currentPonds;
+    });
+  };
+
   // Reset simulation action
   const resetSimulation = () => {
     setWeather('heavy_rain');
@@ -728,7 +753,8 @@ export function PondProvider({ children }) {
     applyLimeDosing,
     togglePump,
     resetSimulation,
-    setSimulationSpeed
+    setSimulationSpeed,
+    addLogEntry
   };
 
   return <PondContext.Provider value={value}>{children}</PondContext.Provider>;

@@ -6,6 +6,69 @@ Proyek ini dibuat untuk menjawab tantangan pengelolaan lingkungan yang reaktif p
 
 ---
 
+## 🏛️ Arsitektur Sistem
+
+Berikut adalah arsitektur aliran data terintegrasi dari sensor IoT di lapangan menuju model prediksi AI, hingga antarmuka pengguna:
+
+```mermaid
+flowchart TB
+    %% Definisi Style
+    classDef edgeStyle fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px,color:#01579b;
+    classDef backendStyle fill:#ede7f6,stroke:#673ab7,stroke-width:2px,color:#311b92;
+    classDef aiStyle fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#e65100;
+    classDef frontStyle fill:#e8f5e9,stroke:#4caf50,stroke-width:2px,color:#1b5e20;
+    classDef dbStyle fill:#eceff1,stroke:#607d8b,stroke-width:2px,color:#263238;
+
+    subgraph EDGE_LAYER ["1. LAPISAN EDGE & SENSOR IoT"]
+        direction LR
+        S1[Sensor pH]:::edgeStyle
+        S2[Sensor Turbidity/TSS]:::edgeStyle
+        S3[Sensor Ultrasonic Level]:::edgeStyle
+        S4[Sensor Flow Meter]:::edgeStyle
+        ESP[Node ESP32 & LoRaWAN Transmitter]:::edgeStyle
+
+        S1 & S2 & S3 & S4 --> ESP
+    end
+
+    subgraph BACKEND_LAYER ["2. LAPISAN DATA & BACKEND"]
+        direction TB
+        MQTT[MQTT Broker / Gateway]:::backendStyle
+        API[Layanan API FastAPI]:::backendStyle
+        DB[(TimescaleDB / PostgreSQL)]:::dbStyle
+
+        ESP -->|Protokol MQTT via LoRaWAN| MQTT
+        MQTT --> API
+        API --> DB
+    end
+
+    subgraph AI_LAYER ["3. LAPISAN ANALISIS AI & OPTIMASI"]
+        direction TB
+        LSTM[Model LSTM: Prediksi pH & Logam]:::aiStyle
+        XGB[Model XGBoost: Prediksi Inflow]:::aiStyle
+        OPT[Mesin Optimasi OR-Tools: Dosing & Pompa]:::aiStyle
+
+        DB --> LSTM & XGB
+        LSTM & XGB -->|Proyeksi 6 Jam ke Depan| OPT
+    end
+
+    subgraph UI_LAYER ["4. LAPISAN ANTARMUKA PENGGUNA (FRONT-END)"]
+        direction LR
+        DASH[Dashboard & AiBriefing]:::frontStyle
+        MAP[Peta Overview & SvgMap]:::frontStyle
+        DET[Detail Kolam & Grafik Live]:::frontStyle
+        ALR[Pusat Peringatan & Alerts]:::frontStyle
+        COMP[Riwayat & Kepatuhan Audit]:::frontStyle
+        PANEL[Panel Kontrol Simulasi]:::frontStyle
+    end
+
+    %% Hubungan Antar Lapisan
+    OPT -->|Rekomendasi Preskriptif via REST API| UI_LAYER
+    DB -->|Visualisasi Data Historis & Live| UI_LAYER
+    UI_LAYER -->|Aksi Operator: Dosing & Pompa| DB
+```
+
+---
+
 ## 🌟 Fitur Utama
 
 1.  **Monitoring IoT Terpusat**: Visualisasi real-time parameter pH, TSS (turbidity), level air kolam, koordinat kolam, dan debit aliran (_inflow/outflow_) melalui Peta Overview spasial dan panel instrumen.
